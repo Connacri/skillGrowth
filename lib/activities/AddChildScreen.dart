@@ -1,4 +1,4 @@
-import 'package:ecom/activities/providers.dart';
+import 'package:skillgrowth/activities/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -42,13 +42,6 @@ class _AddChildScreenState extends State<AddChildScreen> {
 
   Future<void> _submitForm() async {
     if (!_formKey.currentState!.validate()) return;
-
-    if (widget.parent.id == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Veuillez sélectionner un parent')),
-      );
-      return;
-    }
 
     if (_selectedGender == null) {
       ScaffoldMessenger.of(context).showSnackBar(

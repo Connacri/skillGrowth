@@ -4,7 +4,6 @@ import 'dart:typed_data' show Uint8List;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
-import 'package:ecom/pages/MyApp.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -16,6 +15,7 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
+import 'package:skillgrowth/pages/MyApp.dart';
 import '../aGeo/map/LocationAppExample.dart';
 import '../modèles.dart';
 import '../providers.dart';

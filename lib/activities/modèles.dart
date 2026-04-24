@@ -23,8 +23,8 @@ class Schedule {
   factory Schedule.fromMap(Map<String, dynamic> data) {
     return Schedule(
       id: data['id'] ?? '',
-      startTime: (data['startTime'] as Timestamp).toDate(),
-      endTime: (data['endTime'] as Timestamp).toDate(),
+      startTime: (data['startTime'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      endTime: (data['endTime'] as Timestamp?)?.toDate() ?? DateTime.now(),
       days: List<String>.from(data['days'] ?? []),
       createdAt: (data['createdAt'] as Timestamp?)?.toDate(),
       editedAt: (data['editedAt'] as Timestamp?)?.toDate(),
@@ -115,15 +115,14 @@ class Course {
       name: data['name'] ?? 'Sans nom',
       clubId: data['clubId'] ?? '',
       description: data['description'] ?? 'Pas de description',
-      schedules:
-          (data['schedules'] as List<dynamic>?)
-              ?.map((e) => Schedule.fromMap(e))
+      schedules: (data['schedules'] as List<dynamic>?)
+              ?.map((e) => Schedule.fromMap(Map<String, dynamic>.from(e)))
               .toList() ??
           [],
       location:
           data['location'] is GeoPoint ? data['location'] as GeoPoint : null,
-      pricesByCotisationType: Map<String, double>.from(
-        data['pricesByCotisationType'] ?? {},
+      pricesByCotisationType: (data['pricesByCotisationType'] as Map<dynamic, dynamic>?)?.map(
+        (key, value) => MapEntry(key.toString(), (value as num).toDouble()),
       ),
       placeNumber: data['placeNumber'] ?? 0,
       saisonEnd: (data['saisonEnd'] as Timestamp?)?.toDate(),

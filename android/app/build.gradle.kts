@@ -14,7 +14,7 @@ val keystorePropertiesFile = rootProject.file("key.properties")
 keystoreProperties.load(FileInputStream(keystorePropertiesFile)) // ligne 13
 
 android {
-    namespace = "com.wallet.dz.ecom"
+    namespace = "com.skillgrowth.app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "27.0.12077973"
 
@@ -30,12 +30,12 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.wallet.dz.ecom"
+        applicationId = "com.skillgrowth.app"
         multiDexEnabled = true
         minSdk = 23//flutter.minSdkVersion
         targetSdk = 35//flutter.targetSdkVersion
-        versionCode = 1//flutter.versionCode
-        versionName = "1.0.0"//flutter.versionName
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
     }
     signingConfigs {
         create("release") {

@@ -1,9 +1,6 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-import 'dart:math';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 Future<void> ajouterAnnoncesFacticesAvecImages() async {
   final firestore = FirebaseFirestore.instance;
@@ -63,8 +60,6 @@ Future<void> ajouterAnnoncesFacticesAvecImages() async {
 
   print('✅ Toutes les annonces factices avec images ont été ajoutées.');
 }
-
-
 
 Future<void> ajouterAnnoncesFactices() async {
   final firestore = FirebaseFirestore.instance;

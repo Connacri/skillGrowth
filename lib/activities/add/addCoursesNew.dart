@@ -734,11 +734,17 @@ class _PrixCotisationFormState extends State<PrixCotisationForm> {
                   child: ListTile(
                     leading: CircleAvatar(
                       backgroundColor: Colors.blue,
-                      child: Icon(
-                        _getIconForType(type),
-                        color: Colors.white,
-                        size: 20,
-                      ),
+                      child: _getIconForType(type) is IconData
+                          ? Icon(
+                              _getIconForType(type) as IconData,
+                              color: Colors.white,
+                              size: 20,
+                            )
+                          : FaIcon(
+                              _getIconForType(type) as FaIconData,
+                              color: Colors.white,
+                              size: 20,
+                            ),
                     ),
                     title: Text(
                       type.capitalize(),
@@ -856,7 +862,7 @@ class _PrixCotisationFormState extends State<PrixCotisationForm> {
     );
   }
 
-  IconData _getIconForType(String type) {
+  dynamic _getIconForType(String type) {
     switch (type.toLowerCase()) {
       case 'annuel':
         return FontAwesomeIcons.calendar;

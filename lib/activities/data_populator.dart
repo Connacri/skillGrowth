@@ -50,29 +50,30 @@ class DataPopulator {
   Future<void> populateData() async {
     print("🌱 Démarrage du peuplement des données...");
 
-    final List<UserModel> allProfs = await _generateProfs(
-      8,
-    ); // 👈 Génération ici
-    final List<String> childIds = await _generateChildren(23);
-    await _generateParents(12, childIds);
-    await _generateClubsAndCourses(4, allProfs);
-
-    print("✅ Peuplement terminé avec succès !");
+    try {
+      final List<UserModel> allProfs = await _generateProfs(8);
+      final List<String> childIds = await _generateChildren(23);
+      await _generateParents(12, childIds);
+      await _generateClubsAndCourses(4, allProfs);
+      print("✅ Peuplement terminé avec succès !");
+    } catch (e) {
+      print("❌ Erreur lors du peuplement : $e");
+    }
   }
 
   Future<List<UserModel>> _generateProfs(int count) async {
     print("👨‍🏫 Génération de $count professeurs...");
     final List<UserModel> generatedProfs = [];
+    final batch = _firestore.batch();
 
     for (int i = 0; i < count; i++) {
       final id = uuid.v4();
-      final clubId = uuid.v4();
       final name = "${faker.person.firstName()} ${faker.person.lastName()}";
       final email = faker.internet.email();
       final phone = faker.phoneNumber.us();
       final photos = List<String>.generate(
         faker.randomGenerator.integer(4, min: 2),
-        (index) => "https://picsum.photos/seed/${clubId}_$index/400/300",
+        (index) => "https://picsum.photos/seed/${id}_$index/400/300",
       );
       final prof = UserModel(
         id: id,
@@ -80,22 +81,20 @@ class DataPopulator {
         email: email,
         phone: phone,
         photos: photos,
-        gender: '',
-        createdAt: null,
-        lastLogin: null,
-        editedAt: null,
-        role: '',
+        gender: i % 2 == 0 ? 'male' : 'female',
+        createdAt: DateTime.now(),
+        lastLogin: DateTime.now(),
+        editedAt: DateTime.now(),
+        role: 'professeur',
       );
 
-      await profs.doc(id).set(prof.toMap());
+      batch.set(profs.doc(id), prof.toMap());
       generatedProfs.add(prof);
     }
 
+    await batch.commit();
     return generatedProfs;
   }
-
-  // In the _generateClubsAndCourses method, the issue is in how _generateRandomCourse is called
-  // Here's the corrected version of this part:
 
   Future<void> _generateClubsAndCourses(
     int clubCount,
@@ -113,7 +112,6 @@ class DataPopulator {
         (index) => "https://picsum.photos/seed/${clubId}_$index/400/300",
       );
 
-      // Create the club first
       final club = UserModel(
         id: clubId,
         name: name,
@@ -121,29 +119,27 @@ class DataPopulator {
         photos: photos,
         courses: [],
         phone: phone,
-        email: '',
-        createdAt: null,
-        lastLogin: null,
-        editedAt: null,
-        role: '', // Start with empty courses list
+        email: faker.internet.email(),
+        createdAt: DateTime.now(),
+        lastLogin: DateTime.now(),
+        editedAt: DateTime.now(),
+        role: 'club',
       );
 
       final courseCount = faker.randomGenerator.integer(4, min: 2);
       final List<Course> clubCourses = [];
-      final List<String> courseIds = [];
+      final batch = _firestore.batch();
 
-      // Now generate courses with the club reference
       for (int j = 0; j < courseCount; j++) {
-        // Pass both required arguments: profPool and club
         final course = _generateRandomCourse(allProfs, club);
         clubCourses.add(course);
-        courseIds.add(course.id);
-        await courses.doc(course.id).set(course.toMap());
+        batch.set(courses.doc(course.id), course.toMap());
       }
 
-      // Update the club with the courses
       club.courses!.addAll(clubCourses);
-      await clubs.doc(clubId).set(club.toMap());
+      batch.set(clubs.doc(clubId), club.toMap());
+      await batch.commit();
+
       await _assignChildrenToCourses(clubCourses);
     }
   }
@@ -192,7 +188,7 @@ class DataPopulator {
     return Course(
       id: courseId,
       name: courseName,
-      clubId: users.id,
+      clubId: club.id, // Corrected from users.id
       description: description,
       schedules: schedules,
       ageRange: ageRange,
@@ -203,6 +199,7 @@ class DataPopulator {
   Future<void> _generateParents(int count, List<String> childIds) async {
     print("👨‍👩‍👧‍👦 Génération de $count parents...");
     final shuffledChildIds = List<String>.from(childIds)..shuffle();
+    final batch = _firestore.batch();
 
     for (int i = 1; i <= count; i++) {
       if (shuffledChildIds.isEmpty) break;
@@ -218,32 +215,29 @@ class DataPopulator {
       final randomRole = (lesRoles.toList()..shuffle()).first;
       final parentChildren = shuffledChildIds.take(childrenPerParent).toList();
       final gender = Random().nextBool() ? 'male' : 'female';
-      final role = Random().nextBool() ? 'male' : 'female';
       final phone = faker.phoneNumber.random.toString();
       shuffledChildIds.removeRange(0, childrenPerParent);
 
-      final batch = _firestore.batch();
       for (final childId in parentChildren) {
         batch.update(children.doc(childId), {'parentId': parentId});
       }
-      await batch.commit();
 
       final parent = UserModel(
         id: parentId,
         name: name,
         email: email,
-
         gender: gender,
         phone: phone,
-        createdAt: faker.date.dateTime(minYear: 2024, maxYear: 2024),
+        createdAt: DateTime.now(),
         lastLogin: DateTime.now(),
-        editedAt: faker.date.dateTime(minYear: 2025, maxYear: 2025),
-        role: randomRole,
+        editedAt: DateTime.now(),
+        role: randomRole, // Used the randomRole here
         photos: [],
       );
 
-      await users.doc(parentId).set(parent.toMap());
+      batch.set(users.doc(parentId), parent.toMap());
     }
+    await batch.commit();
   }
 
   // Future<List<String>> _generateChildren(int count) async {
@@ -274,14 +268,12 @@ class DataPopulator {
   Future<List<String>> _generateChildren(int count) async {
     print("👶 Génération de $count enfants...");
     final List<String> childIds = [];
+    final batch = _firestore.batch();
 
     for (int i = 1; i <= count; i++) {
       final childId = uuid.v4();
       final name = "${faker.person.firstName()} ${faker.person.lastName()}";
-      final age = faker.randomGenerator.integer(
-        13,
-        min: 4,
-      ); // entre 4 et 13 ans
+      final age = faker.randomGenerator.integer(13, min: 4);
       final gender = Random().nextBool() ? 'male' : 'female';
 
       final child = Child(
@@ -293,10 +285,10 @@ class DataPopulator {
         gender: gender,
       );
 
-      await children.doc(childId).set(child.toMap());
+      batch.set(children.doc(childId), child.toMap());
       childIds.add(childId);
     }
-
+    await batch.commit();
     return childIds;
   }
 
@@ -345,7 +337,6 @@ extension StringExtension on String {
 }
 
 class DataPopulatorClaude {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final CollectionReference clubs;
   final CollectionReference parents;
   final CollectionReference courses;

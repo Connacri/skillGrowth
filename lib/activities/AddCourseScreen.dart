@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ecom/activities/data_populator.dart';
+import 'package:skillgrowth/activities/data_populator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:intl/intl.dart';
@@ -193,7 +193,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
 
     try {
       //  setState(() => _isLoading = true);
-      final profId = Uuid().v4();
+      final profId = const Uuid().v4();
 
       final newProf = UserModel(
         id: profId,
@@ -211,6 +211,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
           .doc(profId)
           .set(newProf.toMap());
 
+      if (!mounted) return;
       Provider.of<ProfProvider>(context, listen: false).addProfessor(newProf);
 
       setState(() {
@@ -249,6 +250,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
         listen: false,
       ).takeAndUploadPhoto();
 
+      if (!mounted) return;
       // Récupérer l'URL de la photo téléchargée
       final photoProvider = Provider.of<PhotoProvider>(context, listen: false);
 
@@ -293,11 +295,12 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
       // Upload des images sélectionnées
       await photoProvider.uploadPickedImages();
 
+      if (!mounted) return;
       // Récupérer les URLs
       final uploadedUrls = photoProvider.uploadedImageUrls;
 
       // Créer l'objet Course (exemple simplifié)
-      final courseId = Uuid().v4();
+      final courseId = const Uuid().v4();
       final newCourse = {
         'id': courseId,
         'name': _nameController.text.trim(),

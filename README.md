@@ -1,6 +1,6 @@
-# ecom
+# SkillGrowth
 
-A new Market project.
+A new SkillGrowth project.
 
 ## Getting Started
 

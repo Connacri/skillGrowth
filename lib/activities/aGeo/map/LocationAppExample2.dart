@@ -110,12 +110,12 @@ class _SearchPage2State extends State<SearchPage2> {
               GeoPoint p = await controller.selectAdvancedPositionPicker();
               Navigator.pop(context, p);
             },
-            child: Icon(FontAwesomeIcons.telegram),
+            child: FaIcon(FontAwesomeIcons.telegram),
           ),
         ),
         pickerConfig: CustomPickerLocationConfig(
           advancedMarkerPicker: MarkerIcon(
-            icon: Icon(
+            icon: FaIcon(
               FontAwesomeIcons.locationDot,
               size: 100,
               color: Colors.red,

@@ -73,104 +73,52 @@ class _ClubRegistrationScreenState extends State<ClubRegistrationScreen> {
 
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isSubmitting = true; // Show the progress indicator
-      });
+      setState(() => _isSubmitting = true);
 
       try {
-        String logoUrl =
-            _logoImage != null ? await _uploadImage(_logoImage!) : _logoUrl!;
-        List<String> photoUrls = [];
-        for (var image in _images) {
-          if (image.file != null) {
-            photoUrls.add(await _uploadImage(image.file!));
-          } else if (image.url != null) {
-            photoUrls.add(image.url!);
-          }
-        }
+        // Parallel uploads for better performance
+        final logoFuture = _logoImage != null 
+            ? _uploadImage(_logoImage!) 
+            : Future.value(_logoUrl);
+        
+        final photoFutures = _images.map((image) {
+          if (image.file != null) return _uploadImage(image.file!);
+          return Future.value(image.url);
+        }).toList();
 
-        UserModel club = UserModel(
-          id: widget.club?.id ?? DateTime.now().toString(),
-          name: _nameController.text,
-          phone: _phoneController.text,
-          logoUrl: logoUrl,
-          photos: photoUrls,
-          courses: _courses,
-          email: '',
-          createdAt: null,
-          lastLogin: null,
-          editedAt: null,
-          role: '',
-        );
+        final results = await Future.wait([logoFuture, ...photoFutures]);
+        final String? finalLogoUrl = results[0] as String?;
+        final List<String> finalPhotoUrls = results.sublist(1).whereType<String>().toList();
+
+        final clubData = {
+          'name': _nameController.text.trim(),
+          'phone': _phoneController.text.trim(),
+          'logoUrl': finalLogoUrl,
+          'photos': finalPhotoUrls,
+          'editedAt': FieldValue.serverTimestamp(),
+          'courses': _courses.map((c) => c.toMap()).toList(),
+        };
 
         if (widget.club == null) {
-          // Create a new club
-          await FirebaseFirestore.instance.collection('clubs').add({
-            'name': club.name,
-            'logoUrl': club.logoUrl,
-            'photos': club.photos,
-            'phone': club.phone,
-            'courses':
-                club.courses!
-                    .map(
-                      (course) => {
-                        'name': course.name,
-                        'description': course.description,
-                        'schedules':
-                            course.schedules
-                                .map(
-                                  (schedule) => {
-                                    'startTime': schedule.startTime,
-                                    'endTime': schedule.endTime,
-                                    'days': schedule.days,
-                                  },
-                                )
-                                .toList(),
-                        'ageRange': course.ageRange,
-                      },
-                    )
-                    .toList(),
-          });
+          clubData['createdAt'] = FieldValue.serverTimestamp();
+          await FirebaseFirestore.instance.collection('clubs').add(clubData);
         } else {
-          // Update the existing club
           await FirebaseFirestore.instance
               .collection('clubs')
               .doc(widget.club!.id)
-              .update({
-                'name': club.name,
-                'phone': club.phone,
-                'logoUrl': club.logoUrl,
-                'photos': club.photos,
-                'courses':
-                    club.courses!
-                        .map(
-                          (course) => {
-                            'name': course.name,
-                            'description': course.description,
-                            'schedules':
-                                course.schedules
-                                    .map(
-                                      (schedule) => {
-                                        'startTime': schedule.startTime,
-                                        'endTime': schedule.endTime,
-                                        'days': schedule.days,
-                                      },
-                                    )
-                                    .toList(),
-                            'ageRange': course.ageRange,
-                          },
-                        )
-                        .toList(),
-              });
+              .update(clubData);
         }
 
-        Navigator.pop(context);
+        if (mounted) Navigator.pop(context);
       } catch (e) {
         print("Error submitting form: $e");
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Erreur: $e')),
+          );
+        }
       } finally {
-        setState(() {
-          _isSubmitting = false; // Hide the progress indicator
-        });
+        if (mounted) setState(() => _isSubmitting = false);
       }
     }
   }

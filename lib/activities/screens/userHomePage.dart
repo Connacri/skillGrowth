@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ecom/activities/generated/profile3.dart';
+import 'package:skillgrowth/activities/generated/profile3.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart' as osm;
@@ -171,6 +171,7 @@ class _HomePageState extends State<HomePage> {
                       }
                     },
                   ),
+
                   ElevatedButton(
                     onPressed: () async {
                       final docRef = FirebaseFirestore.instance
@@ -685,7 +686,7 @@ class _ClubHomePageState extends State<_ClubHomePage> {
                       MaterialPageRoute(builder: (context) => BinancePage()),
                     );
                   },
-                  icon: Icon(FontAwesomeIcons.dollar),
+                  icon: FaIcon(FontAwesomeIcons.dollarSign),
                 ),
                 SizedBox(height: 20),
                 ElevatedButton.icon(

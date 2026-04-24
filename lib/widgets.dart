@@ -1,4 +1,4 @@
-import 'package:ecom/pages/MyApp.dart';
+import 'package:skillgrowth/pages/MyApp.dart';
 import 'package:flutter/material.dart';
 
 import 'auth/AuthProvider.dart';

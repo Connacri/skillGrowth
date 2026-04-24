@@ -49,7 +49,7 @@ class _LoginFormState extends State<LoginForm> {
 
         ElevatedButton.icon(
           onPressed: _loading ? null : _login,
-          icon: const Icon(FontAwesomeIcons.google),
+          icon: const FaIcon(FontAwesomeIcons.google),
           label: Text(_loading ? 'Connexion...' : 'Connexion avec Google'),
           style: ElevatedButton.styleFrom(
             minimumSize: const Size.fromHeight(50),

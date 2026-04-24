@@ -1,6 +1,6 @@
 {
-    "name": "ecom",
-    "short_name": "ecom",
+    "name": "SkillGrowth",
+    "short_name": "SkillGrowth",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

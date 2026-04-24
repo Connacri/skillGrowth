@@ -176,12 +176,12 @@ class _SearchPageState extends State<SearchPage> {
 
               Navigator.pop(context, p);
             },
-            child: Icon(FontAwesomeIcons.arrowDown),
+            child: FaIcon(FontAwesomeIcons.arrowDown),
           ),
         ),
         pickerConfig: CustomPickerLocationConfig(
           advancedMarkerPicker: MarkerIcon(
-            icon: Icon(
+            icon: FaIcon(
               FontAwesomeIcons.locationDot,
               size: 100,
               color: Colors.red,
