@@ -4,7 +4,7 @@ import java.io.FileInputStream
 plugins {
     id("com.android.application")
     id("com.google.gms.google-services")
-    id("kotlin-android")
+    id("org.jetbrains.kotlin.android")
     id("dev.flutter.flutter-gradle-plugin")
 }
 
@@ -16,7 +16,7 @@ keystoreProperties.load(FileInputStream(keystorePropertiesFile)) // ligne 13
 android {
     namespace = "com.skillgrowth.app"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = "27.0.12077973"
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
@@ -32,7 +32,7 @@ android {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.skillgrowth.app"
         multiDexEnabled = true
-        minSdk = 23//flutter.minSdkVersion
+        minSdk = flutter.minSdkVersion//flutter.minSdkVersion
         targetSdk = 35//flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName

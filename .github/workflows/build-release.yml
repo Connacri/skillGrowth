@@ -67,7 +67,8 @@ jobs:
         run: |
           flutter build apk --release \
             --build-name="${VERSION_NAME}" \
-            --build-number=${{ github.run_number }}
+            --build-number=${{ github.run_number }} \
+            --android-skip-build-dependency-validation
 
       - name: Vérification artefact
         run: ls -lh build/app/outputs/flutter-apk/app-release.apk
