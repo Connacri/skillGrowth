@@ -10,8 +10,21 @@ plugins {
 
 val keystoreProperties = Properties()
 val keystorePropertiesFile = rootProject.file("key.properties")
+val requiredKeystoreKeys = listOf("storeFile", "storePassword", "keyAlias", "keyPassword")
+val hasReleaseKeystore = keystorePropertiesFile.exists()
 
-keystoreProperties.load(FileInputStream(keystorePropertiesFile)) // ligne 13
+if (hasReleaseKeystore) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+
+    val missingKeystoreKeys = requiredKeystoreKeys.filter {
+        keystoreProperties.getProperty(it).isNullOrBlank()
+    }
+    require(missingKeystoreKeys.isEmpty()) {
+        "android/key.properties is missing required keys: ${missingKeystoreKeys.joinToString(", ")}"
+    }
+} else {
+    println("android/key.properties not found; release builds will fall back to the debug signing config.")
+}
 
 android {
     namespace = "com.wallet.dz.ecom"
@@ -38,17 +51,19 @@ android {
         versionName = flutter.versionName
     }
     signingConfigs {
-        create("release") {
-            storeFile = file(keystoreProperties["storeFile"] as String)
-            storePassword = keystoreProperties["storePassword"] as String
-            keyAlias = keystoreProperties["keyAlias"] as String
-            keyPassword = keystoreProperties["keyPassword"] as String
+        if (hasReleaseKeystore) {
+            create("release") {
+                storeFile = file(keystoreProperties["storeFile"] as String)
+                storePassword = keystoreProperties["storePassword"] as String
+                keyAlias = keystoreProperties["keyAlias"] as String
+                keyPassword = keystoreProperties["keyPassword"] as String
+            }
         }
     }
 
     buildTypes {
         getByName("release") {
-            signingConfig = signingConfigs.getByName("release")
+            signingConfig = signingConfigs.findByName("release") ?: signingConfigs.getByName("debug")
         }
         getByName("debug") {
             signingConfig = signingConfigs.getByName("debug")
