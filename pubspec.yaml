@@ -142,23 +142,16 @@ flutter:
 
 
   assets:
-    - assets/
-    - assets/lotties/
-    - assets/images/banner.png
-    - assets/images/icon.png
+    - assets/countries.json
     - assets/firebase_logo.png
     - assets/google_logo.png
-    - assets/logos/
-    - assets/icon/icon.png
-    - assets/logos/djezzy.png
-    - assets/logos/inconnu.png
-    - assets/logos/mobilis.png
-    - assets/logos/ooredoo.png
-
-    - assets/logos/logoo.png
+    - assets/marker.png
+    - assets/splash.png
     - assets/flags/
     - assets/i18n/
+    - assets/icon/
+    - assets/images/
+    - assets/logos/
+    - assets/lotties/
     - assets/photos/
-    - assets/photos/a (1).png
-    - assets/logos/binancelogo.png
 

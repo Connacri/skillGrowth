@@ -1,4 +1,4 @@
-package com.skillgrowth.app
+package com.wallet.dz.ecom
 
 import io.flutter.embedding.android.FlutterActivity
 
