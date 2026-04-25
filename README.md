@@ -1,91 +1,34 @@
 # 🚀 SkillGrowth
-
 ### *Advancing Skills through international collaboration*
-
-SkillGrowth is a comprehensive Flutter-based ecosystem designed to connect educational/sports clubs, instructors (coaches/professors), and parents. It streamlines the management of extracurricular activities, course registrations, and student progress tracking.
 
 ---
 
 ## 📲 Download the App
 
 <p align="center">
-  <a href="https://github.com/gzers/SkillGrowth/releases/latest" target="_blank">
-    <img src="https://img.shields.io/badge/Android-APK_Latest_Release-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Download Android APK"/>
-  </a>
+<a href="https://github.com/Connacri/skillGrowth/releases/download/v1.0.0.4/app-release.apk" target="_blank">
+  <img src="https://img.shields.io/badge/Android-APK_1.0.0.4-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Download Android APK"/>
+</a>
 </p>
 
 ---
 
-## 🌟 Key Features
+## 📢 Highlights
 
-### 🏢 For Clubs & Organizations
-*   **Course Management**: Multi-step wizard to create courses with descriptions, age ranges, and capacity.
-*   **Instructor Assignment**: Link qualified coaches or professors to specific activities.
-*   **Schedule Planning**: Flexible scheduling system for recurring weekly sessions.
-*   **Location Integration**: Built-in map support (OSM) to help users find your physical premises.
-
-### 👪 For Parents
-*   **Child Management**: Register and manage profiles for multiple children.
-*   **Activity Discovery**: Search for courses, clubs, and educational programs.
-*   **Seamless Enrollment**: Simple process to sign children up for new skills.
-
-### 🎓 For Coaches & Professors
-*   **Professional Profiles**: Manage availability and educational specializations.
-*   **Course Tracking**: View assigned schedules and enrolled students.
+- **Version** : 1.0.0.4
+- **Release Date** : $(date +'%Y-%m-%d')
 
 ---
 
 ## 🛠️ Tech Stack
 
-*   **Frontend**: [Flutter](https://flutter.dev/) (Dart) - Cross-platform mobile development.
-*   **State Management**: [Provider](https://pub.dev/packages/provider) - Reactive architecture.
-*   **Backend**: [Firebase](https://firebase.google.com/)
-    *   **Authentication**: Secure login and multi-role (Parent/Club/Coach) access.
-    *   **Cloud Firestore**: Real-time NoSQL database for courses, users, and enrollments.
-    *   **Cloud Storage**: Hosting for club logos and course images.
-*   **Maps & Geolocation**: 
-    *   [Flutter OSM Plugin](https://pub.dev/packages/flutter_osm_plugin) - OpenStreetMap integration.
-    *   [Geocoding](https://pub.dev/packages/geocoding) - Address to coordinate conversion.
-*   **Globalization**: [Intl](https://pub.dev/packages/intl) - Support for multiple languages (French, Arabic, English, etc.).
-
----
-
-## ⚙️ CI/CD Pipeline
-
-The project uses **GitHub Actions** for automated quality assurance and deployment:
-*   **Extraction**: Automatically calculates versioning from `pubspec.yaml`.
-*   **Build**: Generates optimized Android APK releases on every push to `master`.
-*   **Release**: Automatically creates GitHub Releases with the generated APK.
-
----
-
-## 🚀 Getting Started
-
-1.  **Clone the repository**:
-    ```bash
-    git clone https://github.com/gzers/SkillGrowth.git
-    ```
-2.  **Install dependencies**:
-    ```bash
-    flutter pub get
-    ```
-3.  **Firebase Setup**:
-    *   Create a project on [Firebase Console](https://console.firebase.google.com/).
-    *   Add Android/iOS apps and download `google-services.json` / `GoogleService-Info.plist`.
-    *   Enable Email and Google Authentication.
-4.  **Run the app**:
-    ```bash
-    flutter run
-    ```
+- **Flutter** : Cross-platform UI framework
+- **Firebase** : Authentication & Cloud Firestore
+- **GitHub Actions** : Automated CI/CD pipeline
 
 ---
 
 ## 🖼️ Preview
 
-*Screenshots coming soon...*
+*Coming soon...*
 
----
-
-## 📄 License
-
-This project is private and intended for specific organizational use.
